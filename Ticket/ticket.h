@@ -17,20 +17,19 @@ struct Seat{
 struct ticket {
 	String tID, from, to;
 	Time leave, arrive;
-	date Date;
+	date Date,Date2;
 	vector<Seat> seat;
-
 	ticket():tID("DEFAULT"){}
 	
 	bool valid() { return tID != "DEFAULT"; }
 	ticket(const train &T, const String &_from, const String &_to,const date &_d)
-		:from(_from), to(_to), tID(T.ID),Date(_d){
+		:from(_from), to(_to), tID(T.ID),Date(_d),Date2(_d){
 		int x = T.getStationID(from), y = T.getStationID(to);
 		leave = T.s[x].leave;
 		arrive = T.s[y].arrive;
 		int d = Date.asint();
 		Date.day += T.getDay(x);
-		
+		Date2.day += T.getDay(y);
 		for (int i = 0; i < T.classN; i++) {
 			double price = 0;
 			for (int j = x + 1; j <= y; j++) price += T.s[j].price[i];

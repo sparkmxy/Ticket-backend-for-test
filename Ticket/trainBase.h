@@ -55,4 +55,3 @@ struct train {
 	int getClassID(const String &cls) const;
 	bool ok(const String &from, const String &to)const;
 };
-

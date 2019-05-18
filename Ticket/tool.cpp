@@ -8,7 +8,9 @@ std::ostream &operator << (std::ostream &os,const Time &time){
 }
 
 std::ostream &operator << (std::ostream &os, const date &d) {
-	os << "2019-06-" << setw(2) << setfill('0') << d.day;
+	if (d.day > 30)
+		os << "2019-07-" << setw(2) << setfill('0') << d.day - 30;
+	else os << "2019-06-" << setw(2) << setfill('0') << d.day;
 	return os;
 }
 

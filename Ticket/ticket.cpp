@@ -8,7 +8,7 @@ std::ostream &operator << (std::ostream &os, const Seat &s) {
 std::ostream &operator << (std::ostream &os, const ticket &t) {
 	os << t.tID << ' ' << t.from << ' ' << t.Date << ' ' << t.leave << ' '
 		<< t.to << ' ';
-	os<<t.Date<< ' ' << t.arrive << ' ';
+	os<<t.Date2<< ' ' << t.arrive << ' ';
 	for (int i = 0; i < t.seat.size(); i++)
 		os << t.seat[i] << ' ';
 	return os;
