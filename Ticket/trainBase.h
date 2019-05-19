@@ -51,6 +51,7 @@ struct train {
 	}
 
 	int getDay(const int &from) const;
+	int getDay2(const int &from) const;
 	int getStationID(const String &target) const;
 	int getClassID(const String &cls) const;
 	bool ok(const String &from, const String &to)const;

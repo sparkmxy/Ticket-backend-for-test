@@ -27,11 +27,19 @@ int train::getClassID(const String &cls) const {
 	return i == classN ? -1 : i;
 }
 
-int train::getDay(const int &from) const {
+int train::getDay2(const int &from) const {
 	int ret = 0;
 	if (from > 0 && s[1].arrive < s[0].leave) ret = 1;
 	for (int i = 2; i <= from; i++)
 		if (s[i].arrive < s[i - 1].arrive) ret++;
+	//std::cout << "from = " << from << " extra Day = " << ret << endl;
+	return ret;
+}
+
+int train::getDay(const int &from) const {
+	int ret = 0;
+	for (int i = 1; i <= from; i++)
+		if (s[i].leave < s[i - 1].leave) ret++;
 	//std::cout << "from = " << from << " extra Day = " << ret << endl;
 	return ret;
 }
