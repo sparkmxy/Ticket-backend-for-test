@@ -3,9 +3,9 @@
 #include "bplustree.hpp"
 #include "dataFile.h"
 
-template<class key_type,class value_type>
+template<class key_type,class value_type,int SIZE = 4096>
 class Index {
-	bplustree<key_type,int,4096> B;
+	bplustree<key_type,int,SIZE> B;
 	dataFile<value_type> data;
 	typedef std::pair<bool,value_type> result_type;
 	typedef std::pair<key_type, value_type> record_type;

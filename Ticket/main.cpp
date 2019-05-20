@@ -27,7 +27,7 @@ int main() {
 	std::ios_base::sync_with_stdio(0);
 	//std::cout.precision(10);	
 	std::string str,s;
-	
+	//std::cout << sizeof(keyInfo) << " " << sizeof(Detail) << endl;
 	while (true) {
 		std::getline(std::cin,str);
 		s = getToken(str, 1);

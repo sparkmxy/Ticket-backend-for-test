@@ -8,9 +8,9 @@ class ALLOC{
     struct node{
         node            *next, *prior;
         point           loc[2];
-		size_t          size;
+		point           size;
         // int type;
-        node(int l1 = 0, int l2 = 0, node *p = nullptr, node *n = nullptr):next(n), prior(p){
+        node(point l1 = 0, point l2 = 0, node *p = nullptr, node *n = nullptr):next(n), prior(p){
             loc[0] = l1, loc[1] = l2;size = l2 - l1;
         }
     };
@@ -21,6 +21,7 @@ class ALLOC{
         if (n->prior != nullptr) n->prior->next = n->next;
         else head = n->next;
         if (n->next != nullptr) n->next->prior = n->prior;
+        delete n;
     }
     //alloc new_node_num nodes sized node_size at the end of the file
     void new_mem(node *n){
@@ -34,17 +35,10 @@ class ALLOC{
         file_end += node_size * new_node_num;
     }
     void clear_node(node *n){
-		/*
         if (n != nullptr){
             clear_node(n->next);
             delete n;
         }
-		*/
-		while (n != nullptr) {
-			node *temp = n;
-			n = n->next;
-			delete temp;
-		}
     }
 public:
     ALLOC():head(nullptr),file_end(){}
@@ -110,14 +104,16 @@ public:
             new_mem(temp);
             temp = head = temp->next;
             delete temp->prior;
+            temp->prior = nullptr;
         }
-        while(temp->next != nullptr && temp->size <= s) temp = temp->next;
-        if (temp->size <= s){
+        while(temp->next != nullptr && temp->size < s) temp = temp->next;
+        if (temp->size < s){
             new_mem(temp);
 			temp = temp->next;
             p = temp->loc[0];
             temp->loc[0] += s;
 			temp->size -=s;
+            if (!(temp->size)) remove(temp);
         }
         else{
             p = temp->loc[0];

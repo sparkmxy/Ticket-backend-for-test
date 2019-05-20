@@ -45,7 +45,7 @@ typedef std::pair<ticket, ticket> ticketPair;
 
 class ticketSystem {
 	trainSystem *TS;
-	bplustree< std::pair<shortString, shortString>, shortString, 4096 > B;
+	bplustree< std::pair<shortString, shortString>, shortString, 8192> B;
 
 
 public:
