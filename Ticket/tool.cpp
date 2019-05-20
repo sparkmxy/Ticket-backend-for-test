@@ -19,15 +19,20 @@ std::ostream &operator << (std::ostream &os, const String &str) {
 	return os;
 }
 
+std::ostream &operator << (std::ostream &os, const shortString &str) {
+	os << str.s;
+	return os;
+}
+
 int String::asint()const {
 	int x = s[0]-'0';
 	for (int i = 1; i < l; i++) x = x * 10 + s[i] - '0';
 	return x;
 }
 
-double String::asdouble()const {
+float String::asfloat()const {
 	int i = (int)s[0] == RMB_SYMBOL ? RMB_LEGNTH : 0;
-	double x = 0, t = 0.1;
+	float x = 0, t = 0.1;
 	for (; i < l && s[i] != '.'; i++) x = x * 10 + s[i] - '0';
 	for (i++; i < l; i++, t *= 0.1) x += t * (s[i] - '0');
 	return x;

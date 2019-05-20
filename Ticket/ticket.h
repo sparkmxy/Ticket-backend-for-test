@@ -6,16 +6,16 @@
 #include "train.h"
 
 struct Seat{
-	String type;
-	double price;
+	shortString type;
+	float price;
 	int num;
 
 	Seat() = default;
-	Seat(const String &s, const double &p, const int &n) :type(s), price(p), num(n) {}
+	Seat(const shortString &s, const float &p, const int &n) :type(s), price(p), num(n) {}
 };
 
 struct ticket {
-	String tID, from, to;
+	shortString tID, from, to;
 	Time leave, arrive;
 	date Date,Date2;
 	vector<Seat> seat;
@@ -29,9 +29,9 @@ struct ticket {
 		arrive = T.s[y].arrive;
 		int d = Date.asint();
 		Date.day += T.getDay(x);
-		Date2.day += T.getDay(y);
+		Date2.day += T.getDay2(y);
 		for (int i = 0; i < T.classN; i++) {
-			double price = 0;
+			float price = 0;
 			for (int j = x + 1; j <= y; j++) price += T.s[j].price[i];
 			short _min = T.s[x+1].num[d][i];
 			for (int j = x + 2; j <= y; j++)
@@ -45,7 +45,7 @@ typedef std::pair<ticket, ticket> ticketPair;
 
 class ticketSystem {
 	trainSystem *TS;
-	bplustree< std::pair<String, String>, String, 4096 > B;
+	bplustree< std::pair<shortString, shortString>, shortString, 4096 > B;
 
 
 public:

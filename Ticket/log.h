@@ -9,7 +9,7 @@
 struct keyInfo {
 	int userID;
 	char catalog;
-	String trainID, from, to;
+	shortString trainID, from, to;
 	date Date;
 
 	keyInfo() = default;
@@ -33,12 +33,12 @@ struct keyInfo {
 struct Detail{
 	static const int maxClassN = 5;
 	Time leave, arrive;
-	String seatClass[maxClassN];
-	int classN,num[maxClassN];
+	shortString seatClass[maxClassN];
+	short classN,num[maxClassN];
 	float price[maxClassN];
 
 	Detail() = default;
-	Detail(const train &T, const String &from,const String &to, const String &seatCls, const int &quantity) {
+	Detail(const train &T, const shortString &from,const shortString &to, const String &seatCls, const int &quantity) {
 		classN = T.classN;
 		for (int i = 0; i < classN; i++) 
 			seatClass[i] = T.seatClass[i],num[i] = 0,price[i] = 0;

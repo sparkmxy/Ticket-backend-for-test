@@ -14,7 +14,7 @@ std::ostream &operator << (std::ostream &os, const ticket &t) {
 	return os;
 }
 
-bool cmpByFirstDim(const std::pair<String,String> &lhs, const std::pair<String,String>& rhs) {
+bool cmpByFirstDim(const std::pair<shortString,shortString> &lhs, const std::pair<shortString,shortString>& rhs) {
 	return lhs.first < rhs.first;
 }
 

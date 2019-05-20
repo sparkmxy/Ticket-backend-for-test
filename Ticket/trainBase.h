@@ -7,15 +7,15 @@ static const int maxClassN = 5;
 
 struct station {
 	static const short INITIAL_QUANTITY = 2000;
-	String name;
+	shortString name;
 	Time arrive, leave, stop;
 	short num[maxDate][maxClassN]; // 2018-06-01 到2018-06-30每一天的余票数
-	double price[maxClassN];
+	float price[maxClassN];
 
 	station() = default;
 
 	station(const String &str, const Time &_arrive, const Time &Leave, const Time &_stop,
-		const vector<double> &V) :name(str), arrive(_arrive), leave(Leave), stop(_stop) {
+		const vector<float> &V) :name(str), arrive(_arrive), leave(Leave), stop(_stop) {
 		for (int i = 0; i < V.size(); i++) price[i] = V[i];
 	}
 
@@ -28,12 +28,12 @@ struct station {
 };
 
 struct train {
-	static const int maxN = 60;
+	static const int maxN = 50;
 	short n; //经过站的数量
 	short classN; //座位类别的数量
-	String ID, name;
+	String name;
 	char catalog;
-	String seatClass[maxClassN];
+	shortString ID,seatClass[maxClassN];
 	station s[maxN];
 	bool onsale;
 

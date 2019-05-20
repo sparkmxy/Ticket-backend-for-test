@@ -145,9 +145,9 @@ void ticketBookingSystem::addTrain(const vector<token> &V) {
 	for (int i = 0; i < m; i++) classes.push_back(V[i+5].second);
 	for (int i = 0; i < n; i++) {
 		int st = 4 + m + i * (4 + m) + 1;
-		vector<double> price;
+		vector<float> price;
 		for (int j = 0; j < m; j++) {
-			price.push_back(V[st + 4 + j].second.asdouble());
+			price.push_back(V[st + 4 + j].second.asfloat());
 			//std::cout << "add price : " << price.back() << endl;
 		}
 		S.push_back(station(V[st].second,
@@ -166,8 +166,8 @@ void ticketBookingSystem::modifyTrain(const vector<token> &V) {
 	for (int i = 0; i < m; i++) classes.push_back(V[i + 5].second);
 	for (int i = 0; i < n; i++) {
 		int st = 4 + m + i * (4 + m) + 1;
-		vector<double> price;
-		for (int j = 0; j < m; j++) price.push_back(V[st + 4 + j].second.asdouble());
+		vector<float> price;
+		for (int j = 0; j < m; j++) price.push_back(V[st + 4 + j].second.asfloat());
 		S.push_back(station(V[st].second,
 			V[st + 1].second.asTime(), V[st + 2].second.asTime(), V[st + 3].second.asTime(), price));
 	}

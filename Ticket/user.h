@@ -9,7 +9,7 @@ struct user {
 
 	int id;
 	userType type;
-	String name, passwd, email, phone;
+	shortString passwd, email, phone,name;
 
 public:
 	user() = default;

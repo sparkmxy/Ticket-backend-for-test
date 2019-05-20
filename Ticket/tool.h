@@ -24,8 +24,10 @@ class String;
 enum TYPE{STRING,_DATE,TIME,_INT,_DOUBLE};
 
 typedef std::pair<TYPE, String> token;
+class shortString;
 
 class String {
+	friend class shortString;
 	static const int SIZE = 40;
 	friend std::ostream &operator << (std::ostream &os, const String &str);
 	char s[SIZE+1];
@@ -71,13 +73,45 @@ public:
 	}
 	int length() const { return l; }
 	int asint() const ;
-	double asdouble() const;
+	float asfloat() const;
 	date asdate() const;
 	Time asTime() const;
 	char aschar()const;
 	bool contain(const char &c)const;
 };
 
+class shortString {
+	static const int SIZE = 20;
+	friend std::ostream &operator << (std::ostream &os, const shortString &str);
+	char s[SIZE + 1];
+	char l;
+
+	int cmp(const shortString &a) const {
+		if (l != a.l) return l < a.l ? -1 : 1;
+		return strcmp(s, a.s);
+	}
+
+public:
+	shortString() = default;
+	shortString(const String &str):l(str.l){
+		for (int i = 0; i < l; i++) s[i] = str.s[i];
+		s[l] = '\0';
+	}
+
+	shortString(const char *c) {
+		l = strlen(c);
+		for (int i = 0; i < l; i++) s[i] = c[i];
+		s[l] = '\0';
+	}
+
+	operator String() const {
+		return String(s);
+	}
+	bool operator < (const shortString &a) const { return cmp(a) < 0; }
+	bool operator == (const shortString &a) const { return cmp(a) == 0; }
+	bool operator != (const shortString &a) const { return cmp(a) != 0; }
+	bool operator > (const shortString &a) const { return cmp(a) > 0; }
+};
 
 struct Time {
 	friend std::ostream &operator << (std::ostream &os, const String &Time);
@@ -131,3 +165,5 @@ std::ostream &operator << (std::ostream &os, const Time &t);
 std::ostream &operator << (std::ostream &os, const date &d);
 
 std::ostream &operator << (std::ostream &os, const String &str);
+
+std::ostream &operator << (std::ostream &os, const shortString &str);

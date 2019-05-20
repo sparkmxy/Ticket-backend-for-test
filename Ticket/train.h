@@ -10,7 +10,7 @@
 #include "index.h"
 
 class trainSystem {
-	Index<String,train> B;
+	Index<shortString,train> B;
 public:
 	trainSystem() :B("train"){}
 
