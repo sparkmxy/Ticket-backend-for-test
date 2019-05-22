@@ -1,6 +1,6 @@
 #pragma once
 
-#include "bplustree.hpp"
+#include "dataFile.h"
 #include "tool.h"
 #include "index.h"
 
@@ -27,12 +27,11 @@ public:
 };
 
 class userSystem {
-	Index<int, user> B;
+	dataFile<user> B;
 	int currentID;
+	static const int INITIAL_ID = 2019;
 public:
-	userSystem() :B("user"){
-		currentID = B.size() + 2019;
-	}
+	userSystem() :B("user"){}
 
 	int add(const vector<token> &V);
 
@@ -46,7 +45,6 @@ public:
 
 	void clear() {
 		B.clear();
-		currentID = 2019;
 	}
 };
 
