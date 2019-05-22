@@ -69,7 +69,7 @@ struct to_block_t{
     }
 };
 #ifndef BUF_POOL_TOTAL_NUM
-    #define BUF_POOL_TOTAL_NUM 400
+    #define BUF_POOL_TOTAL_NUM 800
 #endif
 #ifndef BUF_COLD_PERCENTAGE
     #define BUF_COLD_PERCENTAGE 12
