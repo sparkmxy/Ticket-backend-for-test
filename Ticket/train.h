@@ -1,7 +1,6 @@
 #pragma once
 /*
-³µ´ÎÏà¹ØµÄ¹¦ÄÜ
-
+è½¦æ¬¡ç›¸å…³çš„åŠŸèƒ½
 */
 #include "bplustree.hpp"
 #include "trainBase.h"

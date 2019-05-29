@@ -9,7 +9,7 @@ int userSystem::add(const vector<token> &V) {
 	if (V.size() != 4) return -1;
 	for (int i = 0; i < 4; i++) if (V[i].first != STRING) return -1;
 	/*
-	此处应当加入更多判断，如邮箱是否重复等等
+	姝ゅ搴斿綋鍔犲叆鏇村鍒ゆ柇锛屽閭鏄惁閲嶅绛夌瓑
 	*/
 	if(B.size() == 0)
 		B.push(user(currentID, V[0].second, V[1].second, V[2].second, V[3].second,user::ADMIN));
@@ -50,7 +50,9 @@ bool userSystem::modifyPrivilege(const int &admin, const int &id, int p) {
 	if (_admin.type != user::ADMIN) return false;
 	user u = B.get(id - INITIAL_ID + 1);
 	if (u.type == user::ADMIN) return p == 2;
-	u.type = user::userType(p);
-	B.replace(u,id-INITIAL_ID+1);
+	if (u.type != p) {
+		u.type = user::userType(p);
+		B.replace(u, id - INITIAL_ID + 1);
+	}
 	return true;
 }

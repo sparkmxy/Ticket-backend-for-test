@@ -105,7 +105,7 @@ template<class key_t,
     {
         size_t ord;
         byte *cache = to_it.it->frame + sizeof(node);
-        node *p = (node *)(cache - sizeof(node));
+        node *p     = (node *)(cache - sizeof(node));
         if (!p->type){
             ord = b_search_l(cache, k, p->size);
             if (equal(*nth_key_l(cache, ord), k)) {
@@ -128,7 +128,7 @@ template<class key_t,
         size_t ord;
         to_block_t tmp;
         byte *cache = to_it.it->frame + sizeof(node);
-        node *p = (node *)(cache - sizeof(node));
+        node *p     = (node *)(cache - sizeof(node));
         if (!p->type){
             if (com(k, p->key)) ord = 0;
             else ord = b_search_l(cache, k, p->size);
@@ -338,10 +338,8 @@ template<class key_t,
             tmp = (node *)(to_tmp_b.it->frame);
             if (tmp->size < part_size_n * 3 / 4) {
                 Lbalance_n(to_now_b, to_tmp_b);
-                if (!equal(*nth_key_n(cache_par, ord), now->key)){
-                    *nth_key_n(cache_par, ord) = now->key;
-                    buf->dirty(to_par_b);
-                }
+                *nth_key_n(cache_par, ord) = now->key;
+                buf->dirty(to_par_b);
                 return;
             }
         }
@@ -350,10 +348,8 @@ template<class key_t,
             tmp = (node *)(to_tmp_b.it->frame);
             if (tmp->size < part_size_n * 3 / 4){
                 Rbalance_n(to_now_b, to_tmp_b);
-                if (!equal(*nth_key_n(cache_par, ord + 1), tmp->key)){
-                    *nth_key_n(cache_par, ord + 1) = tmp->key;
-                    buf->dirty(to_par_b);
-                }
+                *nth_key_n(cache_par, ord + 1) = tmp->key;
+                buf->dirty(to_par_b);
                 return;
             }
             else split_n(to_now_b, to_par_b, ord);
@@ -420,7 +416,7 @@ template<class key_t,
         if (now->pos != *nth_point(cache_par)){
             to_tmp_b = buf->load_it(now->prior);
             tmp = (node *)(to_tmp_b.it->frame);
-            if (tmp->size > (part_size_n >> 1)){
+            if ((part_size_n >> 1) < tmp->size){
                 Lreceive_n(to_now_b, to_tmp_b);
                 if (!equal(*nth_key_n(cache_par, ord), now->key)){
                     *nth_key_n(cache_par, ord) = now->key;
@@ -474,7 +470,7 @@ template<class key_t,
     */
     void split_n(to_block_t &to_now_b, to_block_t &to_par_b, size_t order)
     {
-        byte *cache = to_now_b.it->frame + sizeof(node),
+        byte *cache     = to_now_b.it->frame + sizeof(node),
              *cache_par = to_par_b.it->frame + sizeof(node);
         node *now = (node *)(cache - sizeof(node)), 
              *par = (node *)(cache_par - sizeof(node));
@@ -487,8 +483,8 @@ template<class key_t,
 
         byte *cache_tmp = to_tmp_b.it->frame + sizeof(node);
         node *tmp       = (node *)(cache_tmp - sizeof(node));
-        tmp->key = *nth_key_n(cache, ns), tmp->type = now->type, tmp->pos = pos, tmp->size = s;
-        tmp->prior = now->pos, tmp->next = now->next;
+        tmp->key    = *nth_key_n(cache, ns), tmp->type = now->type, tmp->pos = pos, tmp->size = s;
+        tmp->prior  = now->pos, tmp->next = now->next;
 
         if (now->next != invalid_p){
             to_block_t temp = buf->load_it(now->next);
@@ -521,12 +517,12 @@ template<class key_t,
         now->size -= s;
         size_t ns = now->size;
 
-        point pos = alloc.alloc(node_size);
+        point pos           = alloc.alloc(node_size);
         to_block_t to_tmp_b = buf->load_it(pos);
-        byte *cache_tmp = to_tmp_b.it->frame + sizeof(node);
-        node *tmp       = (node *)(cache_tmp - sizeof(node));
-        tmp->key = *nth_key_l(cache, ns), tmp->type = now->type, tmp->pos = pos, tmp->size = s;
-        tmp->prior = now->pos, tmp->next = now->next;
+        byte *cache_tmp     = to_tmp_b.it->frame + sizeof(node);
+        node *tmp           = (node *)(cache_tmp - sizeof(node));
+        tmp->key    = *nth_key_l(cache, ns), tmp->type = now->type, tmp->pos = pos, tmp->size = s;
+        tmp->prior  = now->pos, tmp->next = now->next;
 
         if (now->next != invalid_p){
             to_block_t temp = buf->load_it(now->next);
@@ -549,7 +545,6 @@ template<class key_t,
         *nth_point(cache_par, ns + 1) = tmp->pos;
         ++(par->size);
         buf->dirty(to_par_b);
-        //print_node_l(to_tmp_b.it);
     }
     /*
         * Merge now and the next of it,
@@ -621,38 +616,42 @@ template<class key_t,
         * as we prove that all parts are smaller than part_size, the memory is safe.
         * But mention to judge the size of the root.(actually, it does need to be specially treated)
     */
-    bool _insert_n(to_block_t &to_it, const key_t &k, const value_type &v)
+    int _insert_n(to_block_t &to_it, const key_t &k, const value_type &v)
     {
         byte *cache = to_it.it->frame + sizeof(node);
-        node *now = (node *)(cache - sizeof(node));
+        node *now   = (node *)(cache - sizeof(node));
         size_t ord  = b_search_n(cache, k, now->size);
-        point loc = *nth_point(cache, ord);
-        to_block_t buf_child = buf->load_it(loc);    
-        byte *cache_child = buf_child.it->frame + sizeof(node);
-        node *node_child = (node *)(cache_child - sizeof(node));
-        bool ret;
+        point loc   = *nth_point(cache, ord);
+        to_block_t buf_child    = buf->load_it(loc);    
+        byte *cache_child       = buf_child.it->frame + sizeof(node);
+        node *node_child        = (node *)(cache_child - sizeof(node));
+        int ret;
         if (node_child->type){
             ret = _insert_n(buf_child, k, v);
-            if (!ret) return false;
-            if (node_child->size >= part_size_n) {
+            if (!ret) return 0;
+            if (ret == 2){
                 deal_surplus_n(buf_child, to_it, ord);
+                if (now->size >= part_size_n) ret = 2;
+                else ret = 1;
             }
             else buf->dirty(buf_child);
         }
         else{
             ret = _insert_l(buf_child, k, v);
-            if (!ret) return false;
-            if (node_child->size >= part_size_l) {
+            if (!ret) return 0;
+            if (ret == 2){
                 deal_surplus_l(buf_child, to_it, ord);
+                if (now->size >= part_size_n) ret = 2;
+                else ret = 1;
             }
             else buf->dirty(buf_child);
         }
         return ret;
     }
-    bool _insert_l(to_block_t &to_it, const key_t &k, const value_type &v)
+    int _insert_l(to_block_t &to_it, const key_t &k, const value_type &v)
     {
         byte *cache = to_it.it->frame + sizeof(node);
-        node *now = (node *)(cache - sizeof(node));
+        node *now   = (node *)(cache - sizeof(node));
         size_t ord  = b_search_l(cache, k, now->size);
         if (equal(*nth_key_l(cache, ord), k)) return false;
         ++num;
@@ -663,9 +662,8 @@ template<class key_t,
         ++(now->size);
         *nth_key_l(cache, ord + 1) = k;
         *nth_value(cache, ord + 1) = v;
-        // p.key = *nth_key(p, 0); shall we add this?
-       // print_node_l(to_it.it);
-        return true;
+        if (now->size >= part_size_l) return 2;
+        return 1;
     }
     /*
         * Insert (k,v) at the head of the tree and return true, 
@@ -676,10 +674,10 @@ template<class key_t,
     void _insert_head_n(to_block_t &to_it, const key_t &k, const value_type &v)
     {
         byte *cache = to_it.it->frame + sizeof(node);
-        node *now = (node *)(cache - sizeof(node));
-        to_block_t buf_child = buf->load_it(*nth_point(cache));    
-        byte *cache_child = buf_child.it->frame + sizeof(node);
-        node *node_child = (node *)(cache_child - sizeof(node));
+        node *now   = (node *)(cache - sizeof(node));
+        to_block_t buf_child    = buf->load_it(*nth_point(cache));    
+        byte *cache_child       = buf_child.it->frame + sizeof(node);
+        node *node_child        = (node *)(cache_child - sizeof(node));
         if (node_child->type){
             _insert_head_n(buf_child, k, v);
             *nth_key_n(cache, 0) = now->key = k;
@@ -700,7 +698,7 @@ template<class key_t,
     void _insert_head_l(to_block_t &to_it, const key_t &k, const value_type &v)
     {
         byte *cache = to_it.it->frame + sizeof(node);
-        node *now = (node *)(cache - sizeof(node));
+        node *now   = (node *)(cache - sizeof(node));
         ++num;
         for (size_t i = now->size;i > 0;i--){
             *nth_key_l(cache, i)    = *nth_key_l(cache, i - 1);
@@ -884,44 +882,54 @@ public:
             buf->dirty(root);
             return true;
         }
-        bool ret = true;
+        int ret = 1;
         byte *cache = root.it->frame + sizeof(node);
         if (root_n->type){
             if (com(root_n->key, k))
                 ret = _insert_n(root, k, v);
-            else _insert_head_n(root, k, v);
-            buf->dirty(root);
-            if (root_n->size >= part_size_n){
-                point pos = alloc.alloc(node_size);
-                to_block_t new_root_b = buf->load_it(pos);
-                byte *cache_new_root = new_root_b.it->frame + sizeof(node);
-                node *new_root = (node *)(cache_new_root - sizeof(node));
-                new_root->key = root_n->key,    new_root->size = 1;
-                new_root->pos = pos,            new_root->type = 1;
-                new_root->prior = new_root->next = invalid_p;
-                *nth_key_n(cache_new_root) = root_n->key;
-                *nth_point(cache_new_root) = root_n->pos;
-                split_n(root, new_root_b, 0); 
-                root_pos = new_root->pos;
+            else{
+                ret = 2;
+                _insert_head_n(root, k, v);
+            }
+            if (ret == 2){
+                buf->dirty(root);
+                if (root_n->size >= part_size_n){
+                    point pos = alloc.alloc(node_size);
+                    to_block_t new_root_b = buf->load_it(pos);
+                    byte *cache_new_root = new_root_b.it->frame + sizeof(node);
+                    node *new_root = (node *)(cache_new_root - sizeof(node));
+                    new_root->key = root_n->key,    new_root->size = 1;
+                    new_root->pos = pos,            new_root->type = 1;
+                    new_root->prior = new_root->next = invalid_p;
+                    *nth_key_n(cache_new_root) = root_n->key;
+                    *nth_point(cache_new_root) = root_n->pos;
+                    split_n(root, new_root_b, 0); 
+                    root_pos = new_root->pos;
+                }
             }
         }
         else{
             if (com(root_n->key, k))
                 ret = _insert_l(root, k, v);
-            else _insert_head_l(root, k, v);
-            buf->dirty(root);
-            if (root_n->size >= part_size_l){
-                point pos = alloc.alloc(node_size);
-                to_block_t new_root_b = buf->load_it(pos);
-                byte *cache_new_root = new_root_b.it->frame + sizeof(node);
-                node *new_root = (node *)(cache_new_root - sizeof(node));
-                new_root->key = root_n->key, new_root->size = 1;
-                new_root->pos = pos, new_root->type = 1;
-                new_root->prior = new_root->next = invalid_p;
-                *nth_key_n(cache_new_root) = root_n->key;
-                *nth_point(cache_new_root) = root_n->pos;
-                split_l(root, new_root_b, 0);
-                root_pos = new_root->pos;
+            else {
+                ret = 2;
+                _insert_head_l(root, k, v);
+            }
+            if (ret == 2){
+                buf->dirty(root);
+                if (root_n->size >= part_size_l){
+                    point pos = alloc.alloc(node_size);
+                    to_block_t new_root_b = buf->load_it(pos);
+                    byte *cache_new_root = new_root_b.it->frame + sizeof(node);
+                    node *new_root = (node *)(cache_new_root - sizeof(node));
+                    new_root->key = root_n->key, new_root->size = 1;
+                    new_root->pos = pos, new_root->type = 1;
+                    new_root->prior = new_root->next = invalid_p;
+                    *nth_key_n(cache_new_root) = root_n->key;
+                    *nth_point(cache_new_root) = root_n->pos;
+                    split_l(root, new_root_b, 0);
+                    root_pos = new_root->pos;
+                }
             }
         }
         return ret;

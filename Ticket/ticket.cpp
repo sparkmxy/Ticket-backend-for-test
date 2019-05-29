@@ -18,11 +18,11 @@ bool cmpByFirstDim(const std::pair<shortString,shortString> &lhs, const std::pai
 	return lhs.first < rhs.first;
 }
 
-std::pair<bool,String> checkTransfer //返回是否构成中转方案和中转站
+std::pair<bool,String> checkTransfer //杩斿洖鏄惁鏋勬垚涓浆鏂规鍜屼腑杞珯
 (const train &T1, const train &T2, const String &from, const String &to) {
 	int x = T1.getStationID(from), y = T2.getStationID(to);
 	for (int i = x + 1; i < T1.n; i++) {
-		// 以T1.s[i]为中转站
+		// 浠1.s[i]涓轰腑杞珯
 	//	std::cout << "transfer check: " <<T1.s[i].name<< endl;
 		int j = 0;
 		while (j < y && (T2.s[j] != T1.s[i]||T1.s[i].arrive > T2.s[j].leave)) {

@@ -9,13 +9,6 @@
 #include <stdio.h>
 #include "utility.hpp"
 #include "hash.hpp"
-// struct lathe{
-//     //mode = 0 when it is free, 1 when it is read and 2 when it is written
-//     int R_num;
-//     int W_num;
-//     lathe():R_num(0), W_num(0){}
-//     ~lathe(){}
-// };
 
 using lathe = size_t;
 
@@ -377,11 +370,6 @@ public:
         flush_all();
         return to_block_t(LRU_use(offset, f));
     }
-    // bool release_it(buf_block_t *it){
-    //     if (it == nullptr) return false;
-    //     flush_back(it, f);
-    //     return true;
-    // }
     void dirty(to_block_t &to_it){
         buf_block_t *it = to_it.it;
         if (it->state > 2) return;
