@@ -28,10 +28,12 @@ public:
 
 class userSystem {
 	dataFile<user> B;
-	int currentID;
 	static const int INITIAL_ID = 2019;
+	int currentID;
 public:
-	userSystem() :B("user"){}
+	userSystem() :B("user"){
+		currentID = 2019;
+	}
 
 	int add(const vector<token> &V);
 
