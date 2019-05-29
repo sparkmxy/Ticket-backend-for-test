@@ -32,7 +32,7 @@ class userSystem {
 	int currentID;
 public:
 	userSystem() :B("user"){
-		currentID = 2019;
+		currentID = B.size() + INITIAL_ID;
 	}
 
 	int add(const vector<token> &V);
