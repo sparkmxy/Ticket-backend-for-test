@@ -25,7 +25,7 @@ public:
 			_size = 0;
 			out.seekp(0);
 			out.write(reinterpret_cast<const char *>(&_size), sizeof(int));
-			//out.flush();
+			out.flush();
 			in.open(fileName, fstream::binary);
 		}
 		else {
@@ -73,7 +73,7 @@ template<class T>
 void dataFile<T>::replace(const T& now, int i) {
 	out.seekp((i - 1)*sizeofT + sizeof(int));
 	out.write(reinterpret_cast<const char *>(&now), sizeofT);
-	//out.flush();
+	out.flush();
 }
 
 template<class T>
@@ -81,7 +81,7 @@ void dataFile<T>::push(const T& ele) {
 	_size++;
 	out.seekp((_size - 1)*sizeofT + sizeof(int));
 	out.write(reinterpret_cast<const char *>(&ele), sizeofT);
-	//out.flush();
+	out.flush();
 }
 
 template<class T>
