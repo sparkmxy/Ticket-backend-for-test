@@ -1,5 +1,5 @@
 #pragma once
-//»ùÓÚÎÄ¼şÊµÏÖµÄÒ»¸övector
+//åŸºäºæ–‡ä»¶å®ç°çš„ä¸€ä¸ªvector
 
 #include <string>
 #include <fstream>
@@ -17,7 +17,7 @@ class dataFile {
 	int _size;
 	const int sizeofT;
 public:
-	//¹¹Ôìº¯Êı£º²ÎÊıÎªÎÄ¼şÃû£¬Èç¹û²»´æÔÚ¾Í´´½¨
+	//æ„é€ å‡½æ•°ï¼šå‚æ•°ä¸ºæ–‡ä»¶åï¼Œå¦‚æœä¸å­˜åœ¨å°±åˆ›å»º
 	dataFile(std::string name) :sizeofT(sizeof(T)),fileName(name) {
 		in.open(fileName,fstream::binary);
 		if (!in) {
@@ -25,7 +25,7 @@ public:
 			_size = 0;
 			out.seekp(0);
 			out.write(reinterpret_cast<const char *>(&_size), sizeof(int));
-			out.flush();
+			//out.flush();
 			in.open(fileName, fstream::binary);
 		}
 		else {
@@ -38,7 +38,7 @@ public:
 	}
 	dataFile() = delete;
 
-	// Îö¹¹º¯Êı£º¹Ø±ÕÎÄ¼ş
+	// ææ„å‡½æ•°ï¼šå…³é—­æ–‡ä»¶
 	~dataFile() {
 		out.seekp(0);
 		out.write(reinterpret_cast<const char *>(&_size), sizeof(int));
@@ -54,15 +54,9 @@ public:
 	// push in a new record
 	void push(const T& ele);
 
-	void pop();
-
 	int size() const { return _size; }
 
 	void loadAll(T *ptr);
-
-	void load(int l, int r, T *ptr);
-
-	void upload(int __size, T *ptr);
 
 	void clear() { _size = 0; }
 };
@@ -79,7 +73,7 @@ template<class T>
 void dataFile<T>::replace(const T& now, int i) {
 	out.seekp((i - 1)*sizeofT + sizeof(int));
 	out.write(reinterpret_cast<const char *>(&now), sizeofT);
-	out.flush();
+	//out.flush();
 }
 
 template<class T>
@@ -87,32 +81,11 @@ void dataFile<T>::push(const T& ele) {
 	_size++;
 	out.seekp((_size - 1)*sizeofT + sizeof(int));
 	out.write(reinterpret_cast<const char *>(&ele), sizeofT);
-	out.flush();
+	//out.flush();
 }
 
 template<class T>
 void dataFile<T>::loadAll(T* ptr) {
 	in.seekg(sizeof(int));
 	in.read(reinterpret_cast<char *>(ptr), _size*sizeofT);
-}
-
-template<class T>
-void dataFile<T>::load(int l, int r, T *ptr) {
-	in.seekg(sizeof(int) + (l - 1)*sizeofT);
-	in.read(reinterpret_cast<char *>(ptr), (r - l + 1) * sizeof(T));
-}
-
-template<class T>
-void dataFile<T>::upload(int __size,T* ptr) {
-	out.seekp(0);
-	_size = __size;
-	out.write(reinterpret_cast<const char *>(&_size), sizeof(int));
-	out.seekp(sizeof(int));
-	out.write(reinterpret_cast<const char *>(ptr), _size*sizeofT);
-	out.flush();
-}
-
-template<class T>
-void dataFile<T>::pop() {
-	_size--;
 }
