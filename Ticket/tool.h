@@ -65,6 +65,17 @@ public:
 	bool operator == (const String &a) const { return cmp(a) == 0; }
 	bool operator != (const String &a) const { return cmp(a) != 0; }
 	bool operator > (const String &a) const { return cmp(a) > 0; }
+
+	String operator += (const char &a)
+	{
+		s[l++] = a;
+		return *this;
+	}
+	void addend()
+	{
+		s[l] = '\0';
+	}
+
 	const char &operator [] (const int &idx) const {
 		return s[idx];
 	}
