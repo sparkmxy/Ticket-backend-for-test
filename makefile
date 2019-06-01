@@ -9,4 +9,5 @@ H_FILES = $(wildcard Ticket/*.h)
 LDOPTIONS = -L.
 
 $(PROGRAM): $(CPP_FILES) $(H_FILES) 
-	$(CXX) -o2 -o $(PROGRAM) $(CXXFLAGS) $(LDOPTIONS) $(CPP_FILES)
+	$(CXX) -o $(PROGRAM) $(CXXFLAGS) $(LDOPTIONS) $(CPP_FILES) -O2
+	
