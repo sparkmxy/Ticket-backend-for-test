@@ -27,11 +27,12 @@ public:
 };
 
 class userSystem {
-	dataFile<user> B;
+	bplustree<int,user,8192> B;
 	static const int INITIAL_ID = 2019;
 	int currentID;
 public:
-	userSystem() :B("user"){
+	userSystem(){
+		B.init("user", "user_alloc");
 		currentID = B.size() + INITIAL_ID;
 	}
 
