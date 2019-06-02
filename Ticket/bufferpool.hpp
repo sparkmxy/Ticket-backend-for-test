@@ -370,7 +370,7 @@ public:
         flush_all();
         return to_block_t(LRU_use(offset, f));
     }
-    void dirty(to_block_t &to_it){
+    void dirty(const to_block_t &to_it){
         buf_block_t *it = to_it.it;
         if (it->state > 2) return;
         //if (flush.start != it){//do we need this? maybe not
