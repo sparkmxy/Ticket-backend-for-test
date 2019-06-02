@@ -27,7 +27,7 @@ public:
 };
 
 class userSystem {
-	bplustree<int,user,8192> B;
+	bplustree<int,user,4096> B;
 	static const int INITIAL_ID = 2019;
 	int currentID;
 public:
