@@ -9,6 +9,7 @@
 #include "vector.hpp"
 #include "bufferpool.hpp"
 #include "tool.h"
+
 const point invalid_p = 0xdeadbeef;
 
 template<class key_t,
@@ -19,9 +20,9 @@ template<class key_t,
 {
     using point         =   long;
     using byte          =   char;
-    using list_t        =   pair<key_t, value_type>;
-    using find_t        =   pair<bool, value_type>;
-    using sub_find_t    =   pair<size_t, buf_block_t*>;
+    using list_t        =   std::pair<key_t, value_type>;
+    using find_t        =   std::pair<bool, value_type>;
+    using sub_find_t    =   std::pair<size_t, buf_block_t*>;
     struct node
     {
         key_t       key;
@@ -857,7 +858,7 @@ public:
 		#endif
         return find_t(true, *nth_value(p.second->frame + sizeof(node), p.first));
     }
-    bool set(const key_t &k, const value_type &v) const
+    bool set(const key_t &k, const value_type &v)
     {
         if (empty()) throw(container_is_empty());
         to_block_t root = buf->load_it(root_pos);
