@@ -34,6 +34,7 @@ public:
 	userSystem(){
 		B.init("user", "user_alloc");
 		currentID = B.size() + INITIAL_ID;
+		//std::cout << "cur = " << currentID << std::endl;  
 	}
 
 	int add(const vector<token> &V);
@@ -48,6 +49,7 @@ public:
 
 	void clear() {
 		B.clear();
+		currentID = B.size() + INITIAL_ID;
 	}
 };
 
