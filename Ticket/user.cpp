@@ -38,7 +38,7 @@ bool userSystem::modify(const vector<token> &V) {
 bool userSystem::modifyPrivilege(const int &admin, const int &id, int p) {
 //	if (!B.count(admin) || !B.count(id)) return false;
 	if (admin >=currentID || id >= currentID) return false;
-	user _admin =B.find(admin-INITIAL_ID+1).second;
+	user _admin =B.find(admin).second;
 	if (_admin.type != user::ADMIN) return false;
 	user u = B.find(id).second;
 	if (u.type == user::ADMIN) return p == 2;
